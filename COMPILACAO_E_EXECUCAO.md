@@ -60,7 +60,42 @@ compile_windows.bat
 ### Windows — compilação manual
 
 ```bat
-gcc -Wall -std=c11 src/main.c src/auth.c src/cliente.c src/funcionario.c src/residuo.c src/relatorio.c src/utils.c -o ecogest.exe
+gcc -Wall -std=c11 -static src/main.c src/auth.c src/cliente.c src/funcionario.c src/residuo.c src/relatorio.c src/utils.c -o EcoGest.exe
+```
+
+> **Importante:** a flag `-static` embute todas as dependências dentro do `.exe`. Sem ela, o programa pode não funcionar em computadores que não tenham o MinGW instalado.
+
+---
+
+## Distribuição para Usuário Final
+
+Após compilar, o usuário final recebe **apenas a pasta com o executável** — sem precisar instalar nada:
+
+```
+EcoGest/
+└── EcoGest.exe   ← tudo embutido, basta dar duplo clique
+```
+
+As pastas `data/` e `relatorios/` são criadas automaticamente na primeira execução, na mesma pasta do `.exe`.
+
+**Como entregar:**
+1. Compile com o `compile_windows.bat` (já usa `-static`)
+2. Copie o `EcoGest.exe` gerado para uma pasta limpa
+3. Compacte em `.zip` e envie — o usuário descompacta e executa
+
+### Gerar `.exe` a partir do Linux (cross-compile)
+
+Se você desenvolve no Linux mas quer gerar o `.exe` para Windows:
+
+```bash
+# Instala o cross-compiler
+sudo apt install mingw-w64
+
+# Compila para Windows com linking estático
+x86_64-w64-mingw32-gcc -Wall -std=c11 -static \
+    src/main.c src/auth.c src/cliente.c src/funcionario.c \
+    src/residuo.c src/relatorio.c src/utils.c \
+    -o EcoGest.exe
 ```
 
 ---
