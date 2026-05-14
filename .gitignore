@@ -1,0 +1,6 @@
+ecogest
+ecogest.exe
+*.o
+data/
+relatorios/
+backup/
