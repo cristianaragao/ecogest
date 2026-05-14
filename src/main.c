@@ -14,6 +14,7 @@
 
 #ifdef _WIN32
     #include <direct.h>
+    #include <windows.h>
 #else
     #include <sys/stat.h>
 #endif
@@ -191,6 +192,12 @@ static void menu_principal(Usuario *logado) {
  * Ponto de entrada principal
  * ------------------------------------------------------------------ */
 int main(void) {
+#ifdef _WIN32
+    /* Forca o console do Windows a usar UTF-8 para exibir acentos e bordas */
+    SetConsoleOutputCP(65001);
+    SetConsoleCP(65001);
+#endif
+
     /* Garante que os diretorios necessarios existem */
     criar_diretorios();
 
