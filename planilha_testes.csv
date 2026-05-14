@@ -1,0 +1,16 @@
+ID;Modulo;Caso de Teste;Entrada;Resultado Esperado;Status
+T01;Auth;Login valido;admin/admin123;Acesso concedido e menu principal exibido;OK
+T02;Auth;Login invalido;admin/errada;Mensagem "Login ou senha incorretos";OK
+T03;Auth;3 tentativas;3x senha errada;Programa exibe aviso e encerra;OK
+T04;Cliente;CNPJ invalido;12.345;Mensagem "Formato invalido. Use XX.XXX.XXX/XXXX-XX";OK
+T05;Cliente;Cadastro completo;CNPJ=12.345.678/0001-90 + campos validos;Salvo com sucesso com ID auto-incremental;OK
+T06;Residuo;Duplicidade;mesmo cliente/mes/ano;Erro "Ja existe lancamento para este cliente em...";OK
+T07;Relatorio;Export CSV;R4 semestre 1/2025;Arquivo relatorios/relatorio_R4_ranking_*.csv gerado;OK
+T08;Relatorio;Ranking;3 clientes cadastrados;Lista ordenada do maior para menor volume;OK
+T09;Auth;Senha oculta;digitacao da senha;Caracteres substituidos por * na tela;OK
+T10;Cliente;E-mail invalido;semrrobaepontodotcom;Mensagem "E-mail invalido";OK
+T11;Cliente;CPF invalido (funcionario);123456789;Mensagem "Formato invalido. Use XXX.XXX.XXX-XX";OK
+T12;Backup;Copia arquivos;Opcao 3 do menu Admin;Arquivos .dat copiados para pasta backup/;OK
+T13;Relatorio;Export TXT;R6 semestre 2/2025;Arquivo relatorios/relatorio_R6_aporte_*.txt gerado;OK
+T14;Cliente;Busca por nome;"Ind" (parcial);Lista todos os clientes com "Ind" no nome/razao social;OK
+T15;Residuo;Historico;ID de cliente existente;Exibe todos os lancamentos do cliente com totais;OK
