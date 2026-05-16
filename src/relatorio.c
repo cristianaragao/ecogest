@@ -82,7 +82,7 @@ void relatorio_semestral_cliente(int id_cliente) {
         return;
     }
 
-    Residuo lista[MAX_RESIDUOS];
+    static Residuo lista[MAX_RESIDUOS];
     int total = 0;
     carregar_residuos(lista, &total);
 
@@ -171,7 +171,7 @@ void relatorio_gasto_anual_cliente(int id_cliente) {
     struct tm *t  = localtime(&agora);
     int ano_atual = t->tm_year + 1900;
 
-    Residuo lista[MAX_RESIDUOS];
+    static Residuo lista[MAX_RESIDUOS];
     int total = 0;
     carregar_residuos(lista, &total);
 
@@ -251,7 +251,7 @@ void relatorio_ficha_cliente(int id_cliente) {
         c.rua, c.numero, c.cidade, c.estado, c.cep,
         c.telefone, c.email, c.segmento, c.data_abertura);
 
-    Residuo lista[MAX_RESIDUOS];
+    static Residuo lista[MAX_RESIDUOS];
     int total = 0;
     carregar_residuos(lista, &total);
     float tot = 0;
@@ -301,15 +301,15 @@ void relatorio_ranking_residuos(int semestre, int ano) {
     int inicio, fim;
     meses_semestre(semestre, &inicio, &fim);
 
-    Cliente clientes[MAX_CLIENTES];
+    static Cliente clientes[MAX_CLIENTES];
     int tot_cli = 0;
     carregar_clientes(clientes, &tot_cli);
 
-    Residuo residuos[MAX_RESIDUOS];
+    static Residuo residuos[MAX_RESIDUOS];
     int tot_res = 0;
     carregar_residuos(residuos, &tot_res);
 
-    RankItem rank[MAX_CLIENTES];
+    static RankItem rank[MAX_CLIENTES];
     int n = 0;
 
     for (int i = 0; i < tot_cli; i++) {
@@ -382,15 +382,15 @@ void relatorio_menor_producao(int semestre, int ano) {
     int inicio, fim;
     meses_semestre(semestre, &inicio, &fim);
 
-    Cliente clientes[MAX_CLIENTES];
+    static Cliente clientes[MAX_CLIENTES];
     int tot_cli = 0;
     carregar_clientes(clientes, &tot_cli);
 
-    Residuo residuos[MAX_RESIDUOS];
+    static Residuo residuos[MAX_RESIDUOS];
     int tot_res = 0;
     carregar_residuos(residuos, &tot_res);
 
-    RankItem rank[MAX_CLIENTES];
+    static RankItem rank[MAX_CLIENTES];
     int n = 0;
 
     for (int i = 0; i < tot_cli; i++) {
@@ -457,7 +457,7 @@ void relatorio_aporte_financeiro(int semestre, int ano) {
     int inicio, fim;
     meses_semestre(semestre, &inicio, &fim);
 
-    Residuo lista[MAX_RESIDUOS];
+    static Residuo lista[MAX_RESIDUOS];
     int total = 0;
     carregar_residuos(lista, &total);
 
@@ -506,11 +506,11 @@ void relatorio_aporte_financeiro(int semestre, int ano) {
  * R7 — Distribuicao por estado (UF)
  * ------------------------------------------------------------------ */
 void relatorio_por_estado() {
-    Cliente clientes[MAX_CLIENTES];
+    static Cliente clientes[MAX_CLIENTES];
     int tot_cli = 0;
     carregar_clientes(clientes, &tot_cli);
 
-    Residuo residuos[MAX_RESIDUOS];
+    static Residuo residuos[MAX_RESIDUOS];
     int tot_res = 0;
     carregar_residuos(residuos, &tot_res);
 
@@ -586,11 +586,11 @@ void exportar_csv(const char *nome_arquivo, int tipo_relatorio, int param) {
         return;
     }
 
-    Residuo residuos[MAX_RESIDUOS];
+    static Residuo residuos[MAX_RESIDUOS];
     int tot_res = 0;
     carregar_residuos(residuos, &tot_res);
 
-    Cliente clientes[MAX_CLIENTES];
+    static Cliente clientes[MAX_CLIENTES];
     int tot_cli = 0;
     carregar_clientes(clientes, &tot_cli);
 
