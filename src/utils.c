@@ -135,6 +135,13 @@ int validar_data(const char *data) {
     if (mes < 1 || mes > 12) return 0;
     if (dia < 1 || dia > 31) return 0;
     if (ano < 1900 || ano > 2100) return 0;
+
+    /* Valida numero maximo de dias por mes */
+    int dias_mes[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int bissexto = (ano % 4 == 0 && (ano % 100 != 0 || ano % 400 == 0));
+    if (bissexto) dias_mes[2] = 29;
+    if (dia > dias_mes[mes]) return 0;
+
     return 1;
 }
 

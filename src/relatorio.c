@@ -93,10 +93,10 @@ void relatorio_semestral_cliente(int id_cliente) {
     int ano_atual = t->tm_year + 1900;
 
     /* Buffer para o relatorio */
-    char rel[8192];
+    char rel[65536];
     int  pos = 0;
 
-    pos += sprintf(rel + pos,
+    pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
         "===========================================\n"
         " RELATORIO SEMESTRAL — CLIENTE\n"
         " %s\n"
@@ -120,7 +120,7 @@ void relatorio_semestral_cliente(int id_cliente) {
                 lista[i].mes == mes && lista[i].ano == ano) {
                 char moeda[30];
                 formatar_moeda(lista[i].custo_estimado, moeda);
-                pos += sprintf(rel + pos,
+                pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
                     " %s/%d | %11.2f | %9.2f | %9.2f | %s\n",
                     nome_mes_r(mes), ano,
                     lista[i].particulado_kg,
@@ -135,7 +135,7 @@ void relatorio_semestral_cliente(int id_cliente) {
 
     char moeda_total[30];
     formatar_moeda(tot_custo, moeda_total);
-    pos += sprintf(rel + pos,
+    pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
         "-----------------------------------------------------------\n"
         " Total: %d lancamento(s) | Custo total: %s\n",
         encontrados, moeda_total);
@@ -177,7 +177,7 @@ void relatorio_gasto_anual_cliente(int id_cliente) {
 
     char rel[4096];
     int  pos = 0;
-    pos += sprintf(rel + pos,
+    pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
         "===========================================\n"
         " GASTO MENSAL — ANO %d\n"
         " %s\n"
@@ -193,14 +193,14 @@ void relatorio_gasto_anual_cliente(int id_cliente) {
                 lista[i].mes == m && lista[i].ano == ano_atual) {
                 char moeda[30];
                 formatar_moeda(lista[i].custo_estimado, moeda);
-                pos += sprintf(rel + pos, " %-9s | %s\n", nome_mes_r(m), moeda);
+                pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos, " %-9s | %s\n", nome_mes_r(m), moeda);
                 total_ano += lista[i].custo_estimado;
             }
         }
     }
     char moeda_total[30];
     formatar_moeda(total_ano, moeda_total);
-    pos += sprintf(rel + pos,
+    pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
         "------------------------------\n"
         " TOTAL ANO | %s\n", moeda_total);
 
@@ -226,9 +226,9 @@ void relatorio_ficha_cliente(int id_cliente) {
         return;
     }
 
-    char rel[8192];
+    char rel[65536];
     int  pos = 0;
-    pos += sprintf(rel + pos,
+    pos += snprintf(rel + pos, sizeof(rel) - pos,
         "===========================================\n"
         " FICHA COMPLETA DO CLIENTE\n"
         "===========================================\n"
@@ -261,7 +261,7 @@ void relatorio_ficha_cliente(int id_cliente) {
         if (lista[i].id_cliente != id_cliente) continue;
         char moeda[30];
         formatar_moeda(lista[i].custo_estimado, moeda);
-        pos += sprintf(rel + pos,
+        pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
             " %s/%4d     | %11.2f | %9.2f | %9.2f | %s\n",
             nome_mes_r(lista[i].mes), lista[i].ano,
             lista[i].particulado_kg, lista[i].gases_m3,
@@ -271,7 +271,7 @@ void relatorio_ficha_cliente(int id_cliente) {
     }
     char moeda_total[30];
     formatar_moeda(tot, moeda_total);
-    pos += sprintf(rel + pos,
+    pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
         "----------------------------------------------------------------\n"
         " Total: %d lancamento(s) | Custo acumulado: %s\n", n, moeda_total);
 
@@ -318,6 +318,7 @@ void relatorio_ranking_residuos(int semestre, int ano) {
         rank[n].volume_total = 0;
         rank[n].custo_total  = 0;
         strncpy(rank[n].nome, clientes[i].nome_empresa, sizeof(rank[n].nome) - 1);
+        rank[n].nome[sizeof(rank[n].nome) - 1] = '\0';
 
         for (int j = 0; j < tot_res; j++) {
             if (residuos[j].id_cliente == clientes[i].id &&
@@ -343,9 +344,9 @@ void relatorio_ranking_residuos(int semestre, int ano) {
         }
     }
 
-    char rel[8192];
+    char rel[131072];
     int  pos = 0;
-    pos += sprintf(rel + pos,
+    pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
         "===========================================\n"
         " RANKING — VOLUME DE RESIDUOS TRATADOS\n"
         " Semestre %d/%d  (Meses %d a %d)\n"
@@ -357,11 +358,11 @@ void relatorio_ranking_residuos(int semestre, int ano) {
     for (int i = 0; i < n; i++) {
         char moeda[30];
         formatar_moeda(rank[i].custo_total, moeda);
-        pos += sprintf(rel + pos,
+        pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
             " %-2d| %-30.30s | %13.2f | %s\n",
             i + 1, rank[i].nome, rank[i].volume_total, moeda);
     }
-    pos += sprintf(rel + pos, "\n  Unidade de volume: kg/m3/L somados\n");
+    pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos, "\n  Unidade de volume: kg/m3/L somados\n");
 
     int saida = opcao_saida();
     if (saida == 1) { printf("%s", rel); pausar(); }
@@ -398,6 +399,7 @@ void relatorio_menor_producao(int semestre, int ano) {
         rank[n].volume_total  = 0;
         rank[n].custo_total   = 0;
         strncpy(rank[n].nome, clientes[i].nome_empresa, sizeof(rank[n].nome) - 1);
+        rank[n].nome[sizeof(rank[n].nome) - 1] = '\0';
 
         for (int j = 0; j < tot_res; j++) {
             if (residuos[j].id_cliente == clientes[i].id &&
@@ -422,9 +424,9 @@ void relatorio_menor_producao(int semestre, int ano) {
         }
     }
 
-    char rel[4096];
+    char rel[131072];
     int  pos = 0;
-    pos += sprintf(rel + pos,
+    pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
         "===========================================\n"
         " MENOR PRODUCAO/TRATAMENTO — SEMESTRE %d/%d\n"
         "===========================================\n\n"
@@ -433,7 +435,7 @@ void relatorio_menor_producao(int semestre, int ano) {
         semestre, ano, "Empresa");
 
     for (int i = 0; i < n; i++) {
-        pos += sprintf(rel + pos, " %-2d| %-30.30s | %13.2f\n",
+        pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos, " %-2d| %-30.30s | %13.2f\n",
                        i + 1, rank[i].nome, rank[i].volume_total);
     }
 
@@ -463,7 +465,7 @@ void relatorio_aporte_financeiro(int semestre, int ano) {
     int  pos = 0;
     float total_geral = 0;
 
-    pos += sprintf(rel + pos,
+    pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
         "===========================================\n"
         " APORTE FINANCEIRO SEMESTRAL\n"
         " Semestre %d/%d  (Meses %d a %d)\n"
@@ -480,12 +482,12 @@ void relatorio_aporte_financeiro(int semestre, int ano) {
         }
         char moeda[30];
         formatar_moeda(custo_mes, moeda);
-        pos += sprintf(rel + pos, " %-9s| %s\n", nome_mes_r(m), moeda);
+        pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos, " %-9s| %s\n", nome_mes_r(m), moeda);
         total_geral += custo_mes;
     }
     char moeda_total[30];
     formatar_moeda(total_geral, moeda_total);
-    pos += sprintf(rel + pos,
+    pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
         "----------+------------------\n"
         " TOTAL    | %s\n", moeda_total);
 
@@ -529,7 +531,7 @@ void relatorio_por_estado() {
 
     char rel[4096];
     int  pos = 0;
-    pos += sprintf(rel + pos,
+    pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos,
         "===========================================\n"
         " DISTRIBUICAO POR ESTADO/REGIAO\n"
         "===========================================\n\n"
@@ -556,7 +558,7 @@ void relatorio_por_estado() {
         }
         char moeda[30];
         formatar_moeda(custo, moeda);
-        pos += sprintf(rel + pos, " %-2s | %-8d | %13.2f | %s\n",
+        pos += snprintf(rel + pos, sizeof(rel) - (size_t)pos, " %-2s | %-8d | %13.2f | %s\n",
                        ufs[u], n_cli, vol, moeda);
     }
 
