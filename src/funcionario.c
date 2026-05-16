@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "funcionario.h"
 #include "utils.h"
 
@@ -57,8 +58,11 @@ static void preencher_funcionario(Funcionario *f) {
 
     do {
         printf("  CPF (XXX.XXX.XXX-XX): ");
-        fgets(f->cpf, sizeof(f->cpf), stdin);
-        trim_newline(f->cpf);
+        char tmp_cpf[20];
+        fgets(tmp_cpf, sizeof(tmp_cpf), stdin);
+        trim_newline(tmp_cpf);
+        strncpy(f->cpf, tmp_cpf, sizeof(f->cpf) - 1);
+        f->cpf[sizeof(f->cpf) - 1] = '\0';
         if (!validar_cpf_formato(f->cpf))
             printf("  Formato invalido. Use XXX.XXX.XXX-XX\n");
     } while (!validar_cpf_formato(f->cpf));
@@ -81,8 +85,11 @@ static void preencher_funcionario(Funcionario *f) {
 
     do {
         printf("  Data de admissao (DD/MM/AAAA): ");
-        fgets(f->data_admissao, sizeof(f->data_admissao), stdin);
-        trim_newline(f->data_admissao);
+        char tmp_data[20];
+        fgets(tmp_data, sizeof(tmp_data), stdin);
+        trim_newline(tmp_data);
+        strncpy(f->data_admissao, tmp_data, sizeof(f->data_admissao) - 1);
+        f->data_admissao[sizeof(f->data_admissao) - 1] = '\0';
         if (!validar_data(f->data_admissao))
             printf("  Data invalida. Use DD/MM/AAAA\n");
     } while (!validar_data(f->data_admissao));
@@ -114,6 +121,11 @@ void novo_funcionario() {
         }
     }
 
+    if (total >= MAX_FUNCIONARIOS) {
+        printf("\n  Limite de funcionarios atingido.\n");
+        pausar();
+        return;
+    }
     lista[total++] = f;
     if (salvar_funcionarios(lista, total))
         printf("\n  Funcionario cadastrado com sucesso! ID: %d\n", f.id);
@@ -215,6 +227,47 @@ void buscar_funcionario_cpf() {
 }
 
 /* ------------------------------------------------------------------
+ * Busca funcionario por nome (busca parcial, case-insensitive)
+ * ------------------------------------------------------------------ */
+void buscar_funcionario_nome() {
+    cabecalho("BUSCAR FUNCIONARIO POR NOME");
+
+    char termo[100];
+    printf("  Nome (parte): ");
+    fgets(termo, sizeof(termo), stdin);
+    trim_newline(termo);
+
+    for (int i = 0; termo[i]; i++)
+        termo[i] = (char)tolower((unsigned char)termo[i]);
+
+    Funcionario lista[MAX_FUNCIONARIOS];
+    int total = 0, encontrados = 0;
+    carregar_funcionarios(lista, &total);
+
+    printf("  %-4s %-30s %-15s %-25s %-12s\n",
+           "ID", "Nome", "CPF", "Cargo", "Admissao");
+    linha_separadora(90);
+
+    for (int i = 0; i < total; i++) {
+        char nome_lower[100];
+        strncpy(nome_lower, lista[i].nome, sizeof(nome_lower) - 1);
+        nome_lower[sizeof(nome_lower) - 1] = '\0';
+        for (int j = 0; nome_lower[j]; j++)
+            nome_lower[j] = (char)tolower((unsigned char)nome_lower[j]);
+
+        if (strstr(nome_lower, termo)) {
+            printf("  %-4d %-30.30s %-15s %-25.25s %-12s\n",
+                   lista[i].id, lista[i].nome, lista[i].cpf,
+                   lista[i].cargo, lista[i].data_admissao);
+            encontrados++;
+        }
+    }
+    linha_separadora(90);
+    printf("  %d resultado(s) encontrado(s).\n", encontrados);
+    pausar();
+}
+
+/* ------------------------------------------------------------------
  * Desativa (exclusao logica) um funcionario
  * ------------------------------------------------------------------ */
 void desativar_funcionario() {
@@ -257,7 +310,8 @@ void menu_funcionarios() {
         printf("  [2] Editar funcionario\n");
         printf("  [3] Listar funcionarios\n");
         printf("  [4] Buscar por CPF\n");
-        printf("  [5] Desativar funcionario\n");
+        printf("  [5] Buscar por nome\n");
+        printf("  [6] Desativar funcionario\n");
         printf("  [0] Voltar\n\n");
         printf("  Opcao: ");
 
@@ -270,7 +324,8 @@ void menu_funcionarios() {
             case 2: editar_funcionario();      break;
             case 3: listar_funcionarios();     break;
             case 4: buscar_funcionario_cpf();  break;
-            case 5: desativar_funcionario();   break;
+            case 5: buscar_funcionario_nome(); break;
+            case 6: desativar_funcionario();   break;
             case 0: break;
             default:
                 printf("  Opcao invalida.\n");

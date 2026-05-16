@@ -54,7 +54,7 @@ void cabecalho(const char *titulo) {
     printf("  ║         ECOGEST — Gestao Ambiental       ║\n");
     printf("  ║         UNIP ADS — PIM IV  v1.0          ║\n");
     printf("  ╠══════════════════════════════════════════╣\n");
-    printf("  ║  %-40s  ║\n", titulo);
+    printf("  ║ %-40s ║\n", titulo);
     printf("  ╚══════════════════════════════════════════╝\n\n");
 }
 

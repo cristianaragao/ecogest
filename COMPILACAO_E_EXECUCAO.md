@@ -103,7 +103,46 @@ x86_64-w64-mingw32-gcc -Wall -std=c11 -static \
 ## Como Executar
 
 ### Linux
+
+**Opção 1 — compilar e executar em um comando:**
 ```bash
+make run
+```
+
+**Opção 2 — executar o binário já compilado:**
+```bash
+./ecogest
+```
+
+> **Importante:** execute sempre a partir da raiz do projeto (onde está o `Makefile`).  
+> O sistema cria as pastas `data/` e `relatorios/` no diretório de trabalho atual.  
+> Executar de outro diretório fará o sistema criar os arquivos no lugar errado.
+
+**Requisitos do terminal Linux:**
+- Terminal com suporte a UTF-8 (padrão em distribuições modernas)
+- Variável `TERM` configurada (ex: `xterm-256color`, `xterm`, `linux`)
+- Verifique com: `echo $TERM` e `echo $LANG`
+
+**Dependências de sistema (Ubuntu/Debian):**
+```bash
+sudo apt update && sudo apt install gcc make
+```
+
+**Passo a passo completo do zero:**
+```bash
+# 1. Clone ou acesse o diretório do projeto
+cd /caminho/para/ecogest
+
+# 2. Compile
+make
+
+# 3. Execute
+./ecogest
+```
+
+**Permissão de execução (se necessário):**
+```bash
+chmod +x ecogest
 ./ecogest
 ```
 
