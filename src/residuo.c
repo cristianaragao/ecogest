@@ -40,7 +40,7 @@ int salvar_residuos(Residuo *lista, int total) {
  * Verifica se ja existe lancamento para cliente/mes/ano
  * ------------------------------------------------------------------ */
 int existe_lancamento(int id_cliente, int mes, int ano) {
-    Residuo lista[MAX_RESIDUOS];
+    static Residuo lista[MAX_RESIDUOS];
     int total = 0;
     carregar_residuos(lista, &total);
     for (int i = 0; i < total; i++)
@@ -54,7 +54,7 @@ int existe_lancamento(int id_cliente, int mes, int ano) {
  * Proximo ID disponivel
  * ------------------------------------------------------------------ */
 int proximo_id_residuo() {
-    Residuo lista[MAX_RESIDUOS];
+    static Residuo lista[MAX_RESIDUOS];
     int total = 0;
     carregar_residuos(lista, &total);
     int max = 0;
@@ -92,7 +92,7 @@ void novo_lancamento() {
         fgets(cnpj, sizeof(cnpj), stdin);
         trim_newline(cnpj);
 
-        Cliente lista_c[MAX_CLIENTES];
+        static Cliente lista_c[MAX_CLIENTES];
         int tot_c = 0;
         carregar_clientes(lista_c, &tot_c);
         int found = 0;
@@ -164,7 +164,7 @@ void novo_lancamento() {
     fgets(r.observacoes, sizeof(r.observacoes), stdin);
     trim_newline(r.observacoes);
 
-    Residuo lista[MAX_RESIDUOS];
+    static Residuo lista[MAX_RESIDUOS];
     int total = 0;
     carregar_residuos(lista, &total);
 
@@ -186,7 +186,7 @@ void novo_lancamento() {
 void editar_lancamento() {
     cabecalho("EDITAR LANCAMENTO");
 
-    Residuo lista[MAX_RESIDUOS];
+    static Residuo lista[MAX_RESIDUOS];
     int total = 0;
     carregar_residuos(lista, &total);
 
@@ -256,7 +256,7 @@ void historico_por_cliente() {
            "ID", "Periodo", "Partic.(kg)", "Gases(m3)", "Efluentes(L)", "Custo(R$)");
     linha_separadora(80);
 
-    Residuo lista[MAX_RESIDUOS];
+    static Residuo lista[MAX_RESIDUOS];
     int total = 0, encontrados = 0;
     float total_custo = 0;
     carregar_residuos(lista, &total);
@@ -296,7 +296,7 @@ void resumo_mes_atual() {
            "ID", "Empresa", "Partic.(kg)", "Gases(m3)", "Efluentes(L)", "Custo(R$)");
     linha_separadora(94);
 
-    Residuo lista[MAX_RESIDUOS];
+    static Residuo lista[MAX_RESIDUOS];
     int total = 0;
     carregar_residuos(lista, &total);
 

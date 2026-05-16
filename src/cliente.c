@@ -39,7 +39,7 @@ int salvar_clientes(Cliente *lista, int total) {
  * Retorna o proximo ID disponivel
  * ------------------------------------------------------------------ */
 int proximo_id_cliente() {
-    Cliente lista[MAX_CLIENTES];
+    static Cliente lista[MAX_CLIENTES];
     int total = 0;
     carregar_clientes(lista, &total);
     int max = 0;
@@ -52,7 +52,7 @@ int proximo_id_cliente() {
  * Busca cliente por ID e preenche a struct; retorna indice ou -1
  * ------------------------------------------------------------------ */
 int buscar_cliente_por_id(int id, Cliente *c) {
-    Cliente lista[MAX_CLIENTES];
+    static Cliente lista[MAX_CLIENTES];
     int total = 0;
     carregar_clientes(lista, &total);
     for (int i = 0; i < total; i++) {
@@ -175,7 +175,7 @@ static void preencher_cliente(Cliente *c) {
 void novo_cliente() {
     cabecalho("NOVO CLIENTE");
 
-    Cliente lista[MAX_CLIENTES];
+    static Cliente lista[MAX_CLIENTES];
     int total = 0;
     carregar_clientes(lista, &total);
 
@@ -212,7 +212,7 @@ void novo_cliente() {
 void editar_cliente() {
     cabecalho("EDITAR CLIENTE");
 
-    Cliente lista[MAX_CLIENTES];
+    static Cliente lista[MAX_CLIENTES];
     int total = 0;
     carregar_clientes(lista, &total);
 
@@ -243,7 +243,7 @@ void editar_cliente() {
 void listar_clientes() {
     cabecalho("LISTA DE CLIENTES");
 
-    Cliente lista[MAX_CLIENTES];
+    static Cliente lista[MAX_CLIENTES];
     int total = 0;
     carregar_clientes(lista, &total);
 
@@ -277,7 +277,7 @@ void buscar_cliente_cnpj() {
     fgets(cnpj, sizeof(cnpj), stdin);
     trim_newline(cnpj);
 
-    Cliente lista[MAX_CLIENTES];
+    static Cliente lista[MAX_CLIENTES];
     int total = 0;
     carregar_clientes(lista, &total);
 
@@ -316,7 +316,7 @@ void buscar_cliente_nome() {
     for (int i = 0; termo[i]; i++)
         termo[i] = (char)tolower((unsigned char)termo[i]);
 
-    Cliente lista[MAX_CLIENTES];
+    static Cliente lista[MAX_CLIENTES];
     int total = 0, encontrados = 0;
     carregar_clientes(lista, &total);
 
@@ -355,7 +355,7 @@ void desativar_cliente() {
     fgets(buf, sizeof(buf), stdin);
     int id = atoi(buf);
 
-    Cliente lista[MAX_CLIENTES];
+    static Cliente lista[MAX_CLIENTES];
     int total = 0;
     carregar_clientes(lista, &total);
 

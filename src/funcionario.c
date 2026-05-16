@@ -39,7 +39,7 @@ int salvar_funcionarios(Funcionario *lista, int total) {
  * Retorna o proximo ID disponivel
  * ------------------------------------------------------------------ */
 int proximo_id_funcionario() {
-    Funcionario lista[MAX_FUNCIONARIOS];
+    static Funcionario lista[MAX_FUNCIONARIOS];
     int total = 0;
     carregar_funcionarios(lista, &total);
     int max = 0;
@@ -101,7 +101,7 @@ static void preencher_funcionario(Funcionario *f) {
 void novo_funcionario() {
     cabecalho("NOVO FUNCIONARIO");
 
-    Funcionario lista[MAX_FUNCIONARIOS];
+    static Funcionario lista[MAX_FUNCIONARIOS];
     int total = 0;
     carregar_funcionarios(lista, &total);
 
@@ -138,7 +138,7 @@ void novo_funcionario() {
 void editar_funcionario() {
     cabecalho("EDITAR FUNCIONARIO");
 
-    Funcionario lista[MAX_FUNCIONARIOS];
+    static Funcionario lista[MAX_FUNCIONARIOS];
     int total = 0;
     carregar_funcionarios(lista, &total);
 
@@ -169,7 +169,7 @@ void editar_funcionario() {
 void listar_funcionarios() {
     cabecalho("LISTA DE FUNCIONARIOS");
 
-    Funcionario lista[MAX_FUNCIONARIOS];
+    static Funcionario lista[MAX_FUNCIONARIOS];
     int total = 0;
     carregar_funcionarios(lista, &total);
 
@@ -203,7 +203,7 @@ void buscar_funcionario_cpf() {
     fgets(cpf, sizeof(cpf), stdin);
     trim_newline(cpf);
 
-    Funcionario lista[MAX_FUNCIONARIOS];
+    static Funcionario lista[MAX_FUNCIONARIOS];
     int total = 0;
     carregar_funcionarios(lista, &total);
 
@@ -240,7 +240,7 @@ void buscar_funcionario_nome() {
     for (int i = 0; termo[i]; i++)
         termo[i] = (char)tolower((unsigned char)termo[i]);
 
-    Funcionario lista[MAX_FUNCIONARIOS];
+    static Funcionario lista[MAX_FUNCIONARIOS];
     int total = 0, encontrados = 0;
     carregar_funcionarios(lista, &total);
 
@@ -278,7 +278,7 @@ void desativar_funcionario() {
     fgets(buf, sizeof(buf), stdin);
     int id = atoi(buf);
 
-    Funcionario lista[MAX_FUNCIONARIOS];
+    static Funcionario lista[MAX_FUNCIONARIOS];
     int total = 0;
     carregar_funcionarios(lista, &total);
 
