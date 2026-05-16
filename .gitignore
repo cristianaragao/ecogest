@@ -1,4 +1,5 @@
 ecogest
+ecogest_debug
 ecogest.exe
 *.o
 data/
