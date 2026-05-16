@@ -22,6 +22,7 @@ void novo_funcionario();
 void editar_funcionario();
 void listar_funcionarios();
 void buscar_funcionario_cpf();
+void buscar_funcionario_nome();
 void desativar_funcionario();
 int  carregar_funcionarios(Funcionario *lista, int *total);
 int  salvar_funcionarios(Funcionario *lista, int total);

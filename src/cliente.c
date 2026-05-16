@@ -125,8 +125,11 @@ static void preencher_cliente(Cliente *c) {
     trim_newline(c->cidade);
 
     printf("  Estado (UF)         : ");
-    fgets(c->estado, sizeof(c->estado), stdin);
-    trim_newline(c->estado);
+    char tmp_estado[10];
+    fgets(tmp_estado, sizeof(tmp_estado), stdin);
+    trim_newline(tmp_estado);
+    strncpy(c->estado, tmp_estado, sizeof(c->estado) - 1);
+    c->estado[sizeof(c->estado) - 1] = '\0';
 
     /* CEP com validacao basica */
     do {
@@ -152,8 +155,11 @@ static void preencher_cliente(Cliente *c) {
     /* Data de abertura com validacao */
     do {
         printf("  Data de abertura (DD/MM/AAAA): ");
-        fgets(c->data_abertura, sizeof(c->data_abertura), stdin);
-        trim_newline(c->data_abertura);
+        char tmp_data[20];
+        fgets(tmp_data, sizeof(tmp_data), stdin);
+        trim_newline(tmp_data);
+        strncpy(c->data_abertura, tmp_data, sizeof(c->data_abertura) - 1);
+        c->data_abertura[sizeof(c->data_abertura) - 1] = '\0';
         if (!validar_data(c->data_abertura))
             printf("  Data invalida. Use DD/MM/AAAA\n");
     } while (!validar_data(c->data_abertura));
@@ -189,6 +195,11 @@ void novo_cliente() {
         }
     }
 
+    if (total >= MAX_CLIENTES) {
+        printf("\n  Limite de clientes atingido.\n");
+        pausar();
+        return;
+    }
     lista[total++] = c;
     if (salvar_clientes(lista, total))
         printf("\n  Cliente cadastrado com sucesso! ID: %d\n", c.id);
@@ -319,6 +330,8 @@ void buscar_cliente_nome() {
         for (int j = 0; razao_lower[j]; j++)
             razao_lower[j] = (char)tolower((unsigned char)razao_lower[j]);
 
+        nome_lower[sizeof(nome_lower) - 1] = '\0';
+        razao_lower[sizeof(razao_lower) - 1] = '\0';
         if (strstr(nome_lower, termo) || strstr(razao_lower, termo)) {
             printf("  %-4d %-30.30s %-20s %-15s %-10s\n",
                    lista[i].id, lista[i].nome_empresa, lista[i].cnpj,

@@ -167,6 +167,12 @@ void novo_lancamento() {
     Residuo lista[MAX_RESIDUOS];
     int total = 0;
     carregar_residuos(lista, &total);
+
+    if (total >= MAX_RESIDUOS) {
+        printf("\n  Limite de lancamentos atingido.\n");
+        pausar();
+        return;
+    }
     lista[total++] = r;
 
     if (salvar_residuos(lista, total))
@@ -301,6 +307,7 @@ void resumo_mes_atual() {
         if (lista[i].mes != mes_atual || lista[i].ano != ano_atual) continue;
 
         Cliente c;
+        memset(&c, 0, sizeof(c));
         buscar_cliente_por_id(lista[i].id_cliente, &c);
 
         printf("  %-4d %-30.30s %-15.2f %-12.2f %-18.2f %-12.2f\n",
